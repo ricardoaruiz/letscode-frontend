@@ -17,6 +17,7 @@ export const Card: React.FC<CardProps> = ({
   id,
   title,
   content,
+  list,
   onDelete,
   onBack,
   onNext,
@@ -50,9 +51,10 @@ export const Card: React.FC<CardProps> = ({
         id,
         title,
         content,
+        list,
       })
     }
-  }, [id, onSave])
+  }, [id, list, onSave])
 
   const handleDeleteButtonClick = React.useCallback(() => {
     id && onDelete && onDelete(id)
