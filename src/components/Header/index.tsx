@@ -1,5 +1,5 @@
 import React from 'react'
-import { LogInCircle, User, Exit } from '@styled-icons/boxicons-regular'
+import { LogInCircle, User, Exit, Task } from '@styled-icons/boxicons-regular'
 import { useAuth } from '../../contexts/AuthContext'
 
 import * as S from './styles'
@@ -50,6 +50,9 @@ export const Header: React.VFC = () => {
         )}
         {isLogged && (
           <>
+            <S.ActionButton>
+              <Task size={24} />
+            </S.ActionButton>
             <S.ActionButton>
               <User size={24} />
             </S.ActionButton>
