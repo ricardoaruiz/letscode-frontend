@@ -2,6 +2,7 @@ export type UseCard = {
   getCards: () => Promise<Cards | undefined>
   createCard: (card: Card) => Promise<Card | undefined>
   removeCard: (id: string) => Promise<Cards | undefined>
+  updateCard: (card: Card) => Promise<Card | undefined>
 }
 
 export type Card = {

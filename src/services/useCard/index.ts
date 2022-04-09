@@ -5,15 +5,25 @@ import { Card, CardResponse, Cards, UseCard } from './types'
 const CARDS_URI = '/cards'
 
 export const useCard = (): UseCard => {
+  /**
+   *
+   */
+  const convertCard = React.useCallback((card: CardResponse): Card => {
+    return {
+      id: card.id,
+      title: card.titulo,
+      content: card.conteudo,
+      list: card.lista,
+    }
+  }, [])
+
+  /**
+   *
+   */
   const convertCards = React.useCallback((data: CardResponse[]) => {
     return data.reduce(
       (cards: Cards, card: CardResponse) => {
-        cards[card.lista].push({
-          id: card.id,
-          title: card.titulo,
-          content: card.conteudo,
-          list: card.lista,
-        })
+        cards[card.lista].push(convertCard(card))
         return cards
       },
       {
@@ -50,19 +60,12 @@ export const useCard = (): UseCard => {
           lista: card.list,
         })
 
-        const { id, titulo, conteudo, lista } = response.data
-
-        return {
-          id,
-          title: titulo,
-          content: conteudo,
-          list: lista,
-        }
+        return convertCard(response.data)
       } catch (error) {
         // TODO handle errors
       }
     },
-    []
+    [convertCard]
   )
 
   /**
@@ -81,9 +84,34 @@ export const useCard = (): UseCard => {
     [convertCards]
   )
 
+  /**
+   *
+   */
+  const updateCard = React.useCallback(
+    async (card: Card): Promise<Card | undefined> => {
+      try {
+        const response = await API.put<CardResponse>(
+          `${CARDS_URI}/${card.id}`,
+          {
+            id: card.id,
+            titulo: card.title,
+            conteudo: card.content,
+            lista: card.list,
+          }
+        )
+        return convertCard(response.data)
+      } catch (error) {
+        // TODO handle errors
+        console.error(error)
+      }
+    },
+    [convertCard]
+  )
+
   return {
     getCards,
     createCard,
     removeCard,
+    updateCard,
   }
 }
