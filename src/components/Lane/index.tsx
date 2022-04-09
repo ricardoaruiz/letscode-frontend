@@ -6,7 +6,7 @@ import { CardValues } from '../Card/types'
 
 import * as S from './styles'
 
-export const Lane: React.VFC<LaneProps> = ({ title, cards }) => {
+export const Lane: React.VFC<LaneProps> = ({ title, cards, onDeleteCard }) => {
   return (
     <S.Wrapper role="list" aria-label={`${title} list`}>
       <S.Title>{title}</S.Title>
@@ -19,6 +19,7 @@ export const Lane: React.VFC<LaneProps> = ({ title, cards }) => {
             content={content}
             list={list}
             onSave={(card: CardValues) => console.log(card)}
+            onDelete={onDeleteCard}
           />
         ))}
       </S.Content>

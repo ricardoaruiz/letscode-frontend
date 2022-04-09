@@ -5,7 +5,7 @@ import { HeaderProps } from './types'
 
 import * as S from './styles'
 
-export const Header: React.VFC<HeaderProps> = ({ onNewTask }) => {
+export const Header: React.VFC<HeaderProps> = ({ onNewCard }) => {
   const { login, logout, isLogged } = useAuth()
 
   const userRef = React.useRef<HTMLInputElement | null>(null)
@@ -53,7 +53,7 @@ export const Header: React.VFC<HeaderProps> = ({ onNewTask }) => {
           <>
             <S.ActionButton
               aria-label="new task"
-              onClick={onNewTask}
+              onClick={onNewCard}
               title="Create new task"
             >
               <Task size={24} />

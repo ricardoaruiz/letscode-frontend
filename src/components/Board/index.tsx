@@ -18,20 +18,56 @@ export const Board = () => {
     done: [],
   })
   const [showNewCard, setShowNewCard] = React.useState(false)
-  const { getCards, createCard } = useCard()
+  const { getCards, createCard, removeCard } = useCard()
 
-  const createNewTask = React.useCallback(() => {
+  /**
+   *
+   */
+  const openNewCard = React.useCallback(() => {
     setShowNewCard(true)
   }, [])
 
-  const saveCard = React.useCallback(
+  /**
+   *
+   */
+  const confirmCreateCard = React.useCallback(
     async (card: CardValues) => {
-      setShowNewCard(false)
-      createCard(card)
+      try {
+        const createdCard = await createCard(card)
+        if (createdCard) {
+          setShowNewCard(false)
+          setCards((state) => ({
+            ...state,
+            todo: [...state['todo'], createdCard],
+          }))
+        }
+      } catch (error) {
+        // TODO handle error
+        console.error(error)
+      }
     },
     [createCard]
   )
 
+  /**
+   *
+   */
+  const confirmRemoveCard = React.useCallback(
+    async (id: string) => {
+      try {
+        const cards = await removeCard(id)
+        cards && setCards(cards)
+      } catch (error) {
+        // TODO handle error
+        console.error(error)
+      }
+    },
+    [removeCard]
+  )
+
+  /**
+   *
+   */
   const loadCards = React.useCallback(async () => {
     const cards = await getCards()
     cards && setCards(cards)
@@ -43,15 +79,27 @@ export const Board = () => {
 
   return (
     <S.Main>
-      <Header onNewTask={createNewTask} />
-      <Lane title="To Do" cards={cards['todo']} />
-      <Lane title="Doing" cards={cards['doing']} />
-      <Lane title="Done" cards={cards['done']} />
+      <Header onNewCard={openNewCard} />
+      <Lane
+        title="To Do"
+        cards={cards['todo']}
+        onDeleteCard={confirmRemoveCard}
+      />
+      <Lane
+        title="Doing"
+        cards={cards['doing']}
+        onDeleteCard={confirmRemoveCard}
+      />
+      <Lane
+        title="Done"
+        cards={cards['done']}
+        onDeleteCard={confirmRemoveCard}
+      />
 
       <Modal isOpen={showNewCard} closeOnEsc={() => setShowNewCard(false)}>
         <S.NewTaskModalContent>
           <Card
-            onSave={saveCard}
+            onSave={confirmCreateCard}
             onCancel={() => setShowNewCard(false)}
             list="todo"
           />

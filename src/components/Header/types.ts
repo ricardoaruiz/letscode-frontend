@@ -1,3 +1,3 @@
 export type HeaderProps = {
-  onNewTask: () => void
+  onNewCard: () => void
 }
