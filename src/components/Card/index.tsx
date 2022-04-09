@@ -43,17 +43,17 @@ export const Card: React.FC<CardProps> = ({
     const title = titleRef.current?.value
     const content = contentRef.current?.value
 
-    formRef.current?.reset()
+    if (!title || !content) return
 
+    formRef.current?.reset()
     id && setIsEditMode(false)
-    if (title && content) {
-      onSave({
-        id,
-        title,
-        content,
-        list,
-      })
-    }
+
+    onSave({
+      id,
+      title,
+      content,
+      list,
+    })
   }, [id, list, onSave])
 
   const handleDeleteButtonClick = React.useCallback(() => {

@@ -8,30 +8,48 @@ export const useCard = (): UseCard => {
   /**
    *
    */
-  const convertCard = React.useCallback((card: CardResponse): Card => {
-    return {
-      id: card.id,
-      title: card.titulo,
-      content: card.conteudo,
-      list: card.lista,
-    }
-  }, [])
+  const convertCardFromApiToView = React.useCallback(
+    (card: CardResponse): Card => {
+      return {
+        id: card.id,
+        title: card.titulo,
+        content: card.conteudo,
+        list: card.lista,
+      }
+    },
+    []
+  )
 
   /**
    *
    */
-  const convertCards = React.useCallback((data: CardResponse[]) => {
-    return data.reduce(
-      (cards: Cards, card: CardResponse) => {
-        cards[card.lista].push(convertCard(card))
-        return cards
-      },
-      {
-        todo: [],
-        doing: [],
-        done: [],
-      }
-    )
+  const convertCardsFromApiToView = React.useCallback(
+    (data: CardResponse[]) => {
+      return data.reduce(
+        (cards: Cards, card: CardResponse) => {
+          cards[card.lista].push(convertCardFromApiToView(card))
+          return cards
+        },
+        {
+          todo: [],
+          doing: [],
+          done: [],
+        }
+      )
+    },
+    [convertCardFromApiToView]
+  )
+
+  /**
+   *
+   */
+  const convertCardFromViewToApi = React.useCallback((card: Card) => {
+    return {
+      id: card.id,
+      titulo: card.title,
+      conteudo: card.content,
+      lista: card.list,
+    }
   }, [])
 
   /**
@@ -41,11 +59,11 @@ export const useCard = (): UseCard => {
   const getCards = React.useCallback(async () => {
     try {
       const response = await API.get<CardResponse[]>(CARDS_URI)
-      return convertCards(response.data)
+      return convertCardsFromApiToView(response.data)
     } catch (error) {
       // TODO handle errors
     }
-  }, [convertCards])
+  }, [convertCardsFromApiToView])
 
   /**
    *
@@ -54,18 +72,17 @@ export const useCard = (): UseCard => {
   const createCard = React.useCallback(
     async (card: Card): Promise<Card | undefined> => {
       try {
-        const response = await API.post<CardResponse>(CARDS_URI, {
-          titulo: card.title,
-          conteudo: card.content,
-          lista: card.list,
-        })
+        const response = await API.post<CardResponse>(
+          CARDS_URI,
+          convertCardFromViewToApi(card)
+        )
 
-        return convertCard(response.data)
+        return convertCardFromApiToView(response.data)
       } catch (error) {
         // TODO handle errors
       }
     },
-    [convertCard]
+    [convertCardFromApiToView, convertCardFromViewToApi]
   )
 
   /**
@@ -76,12 +93,12 @@ export const useCard = (): UseCard => {
     async (id: string) => {
       try {
         const response = await API.delete<CardResponse[]>(`${CARDS_URI}/${id}`)
-        return convertCards(response.data)
+        return convertCardsFromApiToView(response.data)
       } catch (error) {
         // TODO handle erros
       }
     },
-    [convertCards]
+    [convertCardsFromApiToView]
   )
 
   /**
@@ -92,20 +109,15 @@ export const useCard = (): UseCard => {
       try {
         const response = await API.put<CardResponse>(
           `${CARDS_URI}/${card.id}`,
-          {
-            id: card.id,
-            titulo: card.title,
-            conteudo: card.content,
-            lista: card.list,
-          }
+          convertCardFromViewToApi(card)
         )
-        return convertCard(response.data)
+        return convertCardFromApiToView(response.data)
       } catch (error) {
         // TODO handle errors
         console.error(error)
       }
     },
-    [convertCard]
+    [convertCardFromApiToView, convertCardFromViewToApi]
   )
 
   return {

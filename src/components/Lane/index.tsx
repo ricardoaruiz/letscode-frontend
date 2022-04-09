@@ -2,13 +2,13 @@ import React from 'react'
 
 import { LaneProps } from './types'
 import { Card } from '../Card'
-import { CardValues } from '../Card/types'
 
 import * as S from './styles'
 
 export const Lane: React.VFC<LaneProps> = ({
   title,
   cards,
+  onSave,
   onDeleteCard,
   onForwardCard,
   onBackwardCard,
@@ -24,7 +24,7 @@ export const Lane: React.VFC<LaneProps> = ({
             title={title}
             content={content}
             list={list}
-            onSave={(card: CardValues) => console.log(card)}
+            onSave={onSave}
             onDelete={onDeleteCard}
             onBack={onBackwardCard}
             onNext={onForwardCard}

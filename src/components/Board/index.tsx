@@ -6,20 +6,10 @@ import { Modal } from '../Modal'
 import { Card } from '../Card'
 import { CardValues } from '../Card/types'
 import { Cards } from '../../services/useCard/types'
-
 import { useCard } from '../../services/useCard'
+import { LANE_PATH } from './constants'
 
 import * as S from './styles'
-
-type DunamicPath = {
-  [key: string]: { next: string; back: string }
-}
-
-const LANE_PATH: DunamicPath = {
-  todo: { next: 'doing', back: '' },
-  doing: { next: 'done', back: 'todo' },
-  done: { next: '', back: 'doing' },
-}
 
 export const Board = () => {
   const [cards, setCards] = React.useState<Cards>({
@@ -92,8 +82,12 @@ export const Board = () => {
   /**
    *
    */
-  const moveCard = React.useCallback(
-    async (card: CardValues, currentLane: string, futureLane: string) => {
+  const confirmUpdateCard = React.useCallback(
+    async (
+      card: CardValues,
+      currentLane: string = card.list,
+      futureLane: string = card.list
+    ) => {
       try {
         const updatedCard = await updateCard(card)
 
@@ -127,12 +121,18 @@ export const Board = () => {
 
       if (!card) return
 
-      const futureLane = LANE_PATH[card.list][direction]
+      const currentLane = card.list
+      const futureLane = LANE_PATH[currentLane][direction]
+
       if (futureLane) {
-        moveCard({ ...card, list: futureLane }, card.list, futureLane)
+        confirmUpdateCard(
+          { ...card, list: futureLane },
+          currentLane,
+          futureLane
+        )
       }
     },
-    [moveCard, findCardById]
+    [confirmUpdateCard, findCardById]
   )
 
   /**
@@ -156,6 +156,7 @@ export const Board = () => {
       <Lane
         title="To Do"
         cards={cards['todo']}
+        onSave={(card) => confirmUpdateCard(card)}
         onDeleteCard={confirmRemoveCard}
         onForwardCard={(id: string) => confirmMoveCard(id, 'next')}
         onBackwardCard={(id: string) => confirmMoveCard(id, 'back')}
@@ -163,6 +164,7 @@ export const Board = () => {
       <Lane
         title="Doing"
         cards={cards['doing']}
+        onSave={(card) => confirmUpdateCard(card)}
         onDeleteCard={confirmRemoveCard}
         onForwardCard={(id: string) => confirmMoveCard(id, 'next')}
         onBackwardCard={(id: string) => confirmMoveCard(id, 'back')}
@@ -170,6 +172,7 @@ export const Board = () => {
       <Lane
         title="Done"
         cards={cards['done']}
+        onSave={(card) => confirmUpdateCard(card)}
         onDeleteCard={confirmRemoveCard}
         onForwardCard={(id: string) => confirmMoveCard(id, 'next')}
         onBackwardCard={(id: string) => confirmMoveCard(id, 'back')}
