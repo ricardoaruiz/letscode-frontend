@@ -2,15 +2,15 @@ import React from 'react'
 import { ThemeProvider } from 'styled-components'
 
 import { GlobalStyles } from './styles/GlobalStyles'
-import { myTheme } from './styles/Theme'
+import { theme } from './styles/Theme'
+import { Board } from './components/Board'
 
 export const App = () => {
   return (
-    <ThemeProvider theme={myTheme}>
-      {/* Global styles */}
+    <ThemeProvider theme={theme}>
       <GlobalStyles />
 
-      <h1>Wellcome to React with webpack</h1>
+      <Board />
     </ThemeProvider>
   )
 }

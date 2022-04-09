@@ -1,12 +1,13 @@
 import { DefaultTheme } from 'styled-components'
 
-export const myTheme: DefaultTheme = {
+export const theme: DefaultTheme = {
   colors: {
-    primary: '#1e78c0',
-    privaryHover: '#8ed6fb',
-    secondary: '#ffc133',
-    secondaryHover: '#ffb809',
+    primary: '#F5B025',
+    privaryHover: '#FDDF2D',
+    secondary: '#F29949',
+    secondaryHover: '#F29949',
     white: '#fff',
-    black: '#333',
+    black: '#26262A',
+    secondBlack: '#1E1E22',
   },
 } as const

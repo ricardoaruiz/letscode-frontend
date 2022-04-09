@@ -1,12 +1,11 @@
 import React from 'react'
-import { render, screen } from './utils/test-utils'
+import { renderWithContext, screen } from '../../utils/test-utils'
 
-import App from './App'
+import { Board } from './index'
 
-describe('<App />', () => {
+describe('<Board />', () => {
   it('should be render correctly', () => {
-    render(<App />)
-
+    renderWithContext(<Board />)
     expect(screen.getByRole('heading', { name: /to do/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /doing/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /done/i })).toBeInTheDocument()
