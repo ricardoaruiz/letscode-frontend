@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components'
 import { lighten } from 'polished'
 import media from 'styled-media-query'
-import { LogInCircle } from '@styled-icons/boxicons-regular'
 
 export const Wrapper = styled.header`
   ${({ theme }) => css`
@@ -63,8 +62,10 @@ export const Input = styled.input`
     }
   `};
 `
-export const LoginButton = styled(LogInCircle)`
+export const ActionButton = styled.button`
   ${({ theme }) => css`
+    background-color: transparent;
+    border: none;
     color: ${theme.colors.white};
     cursor: pointer;
     margin-left: 10px;

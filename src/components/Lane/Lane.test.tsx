@@ -8,14 +8,8 @@ describe('<Lane />', () => {
     renderWithContext(<Lane title="To Do" />)
     expect(screen.getByRole('heading', { name: /to do/i }))
     expect(screen.getByRole('list')).toHaveStyle({
-      'border-right': '4px solid #F5B025',
-    })
-  })
-
-  it('should be render without right border', () => {
-    renderWithContext(<Lane title="To Do" showRightBorder={false} />)
-    expect(screen.getByRole('list')).not.toHaveStyle({
-      'border-right': '4px solid #F5B025',
+      'border-left': '2px solid #F5B025',
+      'border-right': '2px solid #F5B025',
     })
   })
 })

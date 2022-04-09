@@ -11,7 +11,7 @@ export const Board = () => {
       <Header />
       <Lane title="To Do" />
       <Lane title="Doing" />
-      <Lane title="Done" showRightBorder={false} />
+      <Lane title="Done" />
     </S.Main>
   )
 }
