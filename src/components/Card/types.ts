@@ -1,11 +1,12 @@
 export type CardProps = {
   id?: string
-  title: string
-  content: string
+  title?: string
+  content?: string
   list?: string
-  onBack: (id: string) => void
-  onNext: (id: string) => void
-  onDelete: (id: string) => void
+  onBack?: (id: string) => void
+  onNext?: (id: string) => void
+  onDelete?: (id: string) => void
+  onCancel?: () => void
   onSave: (card: CardValues) => void
 }
 

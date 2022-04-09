@@ -1,10 +1,11 @@
 import React from 'react'
 import { LogInCircle, User, Exit, Task } from '@styled-icons/boxicons-regular'
 import { useAuth } from '../../contexts/AuthContext'
+import { HeaderProps } from './types'
 
 import * as S from './styles'
 
-export const Header: React.VFC = () => {
+export const Header: React.VFC<HeaderProps> = ({ onNewTask }) => {
   const { login, logout, isLogged } = useAuth()
 
   const userRef = React.useRef<HTMLInputElement | null>(null)
@@ -50,13 +51,20 @@ export const Header: React.VFC = () => {
         )}
         {isLogged && (
           <>
-            <S.ActionButton>
+            <S.ActionButton
+              aria-label="new task"
+              onClick={onNewTask}
+              title="Create new task"
+            >
               <Task size={24} />
             </S.ActionButton>
-            <S.ActionButton>
+            <S.ActionButton
+              aria-label="user information"
+              title="User information"
+            >
               <User size={24} />
             </S.ActionButton>
-            <S.ActionButton onClick={logout}>
+            <S.ActionButton aria-label="logout" onClick={logout} title="Logout">
               <Exit size={24} />
             </S.ActionButton>
           </>

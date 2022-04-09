@@ -23,3 +23,8 @@ export const Main = styled.main`
 
   `}
 `
+
+export const NewTaskModalContent = styled.div`
+  max-width: 480px;
+  width: 100%;
+`

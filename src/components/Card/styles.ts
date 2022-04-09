@@ -46,6 +46,11 @@ export const ViewContent = styled.div`
   overflow-y: auto;
 `
 
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`
+
 export const InputTitle = styled.input`
   ${({ theme }) => css`
     ${Title}

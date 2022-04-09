@@ -20,10 +20,13 @@ export const Card: React.FC<CardProps> = ({
   onDelete,
   onBack,
   onNext,
+  onCancel,
   onSave,
 }) => {
+  const formRef = React.useRef<HTMLFormElement | null>(null)
   const titleRef = React.useRef<HTMLInputElement | null>(null)
   const contentRef = React.useRef<HTMLTextAreaElement | null>(null)
+
   const [isEditMode, setIsEditMode] = React.useState(() => (!id ? true : false))
 
   const handleEditButtonClick = React.useCallback(() => {
@@ -31,17 +34,17 @@ export const Card: React.FC<CardProps> = ({
   }, [])
 
   const handleCancelButtonClick = React.useCallback(() => {
-    setIsEditMode(false)
-  }, [])
+    id && setIsEditMode(false)
+    onCancel && onCancel()
+  }, [id, onCancel])
 
   const handleSaveButtonClick = React.useCallback(() => {
-    setIsEditMode(false)
-
     const title = titleRef.current?.value
     const content = contentRef.current?.value
 
-    console.log(title, content)
+    formRef.current?.reset()
 
+    id && setIsEditMode(false)
     if (title && content) {
       onSave({
         id,
@@ -52,16 +55,22 @@ export const Card: React.FC<CardProps> = ({
   }, [id, onSave])
 
   const handleDeleteButtonClick = React.useCallback(() => {
-    id && onDelete(id)
+    id && onDelete && onDelete(id)
   }, [id, onDelete])
 
   const handleBackButtonClick = React.useCallback(() => {
-    id && onBack(id)
+    id && onBack && onBack(id)
   }, [id, onBack])
 
   const handleNextButtonClick = React.useCallback(() => {
-    id && onNext(id)
+    id && onNext && onNext(id)
   }, [id, onNext])
+
+  React.useEffect(() => {
+    if (isEditMode) {
+      titleRef.current?.focus()
+    }
+  }, [isEditMode])
 
   return (
     <S.Wrapper>
@@ -72,6 +81,7 @@ export const Card: React.FC<CardProps> = ({
             <S.ActionButton
               aria-label="edit"
               onClick={handleEditButtonClick}
+              title="Edit"
               className="edit-button"
             >
               <Edit size={20} />
@@ -83,18 +93,21 @@ export const Card: React.FC<CardProps> = ({
           <S.Actions>
             <S.ActionButton
               aria-label="back button"
+              title="Move to preview lane"
               onClick={handleBackButtonClick}
             >
               <LeftArrow size={20} />
             </S.ActionButton>
             <S.ActionButton
               aria-label="remove button"
+              title="Remove"
               onClick={handleDeleteButtonClick}
             >
               <Trash size={20} />
             </S.ActionButton>
             <S.ActionButton
               aria-label="next button"
+              title="Move to next lane"
               onClick={handleNextButtonClick}
             >
               <RightArrow size={20} />
@@ -104,9 +117,8 @@ export const Card: React.FC<CardProps> = ({
       )}
 
       {isEditMode && (
-        <>
+        <S.Form ref={formRef}>
           <S.InputTitle
-            id="title"
             aria-label="Type the title here"
             placeholder="Type the title here"
             defaultValue={title}
@@ -114,7 +126,6 @@ export const Card: React.FC<CardProps> = ({
           />
 
           <S.InputContent
-            id="content"
             aria-label="Type the content here"
             placeholder="Type the content here"
             defaultValue={content}
@@ -123,20 +134,24 @@ export const Card: React.FC<CardProps> = ({
 
           <S.Actions>
             <S.ActionButton
+              type="button"
               aria-label="cancel edit button"
+              title="Cancel operation"
               onClick={handleCancelButtonClick}
             >
               <Block size={20} />
             </S.ActionButton>
 
             <S.ActionButton
+              type="button"
               aria-label="save edit button"
+              title="Save operation"
               onClick={handleSaveButtonClick}
             >
               <Save size={20} />
             </S.ActionButton>
           </S.Actions>
-        </>
+        </S.Form>
       )}
     </S.Wrapper>
   )
