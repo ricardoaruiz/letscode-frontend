@@ -1,5 +1,4 @@
 import React from 'react'
-import { WindowClose } from '@styled-icons/boxicons-regular'
 
 import { ModalProps } from './types'
 
@@ -9,7 +8,6 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   isOpen = false,
   closeOnEsc,
-  hideCloseButton = false,
 }) => {
   React.useEffect(() => {
     const body = document.querySelector('body')
@@ -30,12 +28,6 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <S.Overlay isOpen={isOpen}>
-      {!hideCloseButton && (
-        <S.ActionButton aria-label="close modal" onClick={closeOnEsc}>
-          <WindowClose size={24} />
-        </S.ActionButton>
-      )}
-
       <S.Content
         role="alertdialog"
         aria-hidden={!isOpen}

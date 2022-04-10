@@ -21,6 +21,10 @@ const INITIAL_CARDS = {
 export const Board = () => {
   const [cards, setCards] = React.useState<Cards>(INITIAL_CARDS)
   const [showNewCard, setShowNewCard] = React.useState(false)
+  const [showRemoveCardConfirmation, setShowRemoveCardConfirmation] =
+    React.useState(false)
+  const [selectedCardToRemove, setSeletedCardToRemove] =
+    React.useState<string>()
   const { getCards, createCard, removeCard, updateCard } = useCard()
   const { isLogged, logout, isSessionExpired, setIsSessionExpired } = useAuth()
 
@@ -57,10 +61,12 @@ export const Board = () => {
    *
    */
   const confirmRemoveCard = React.useCallback(
-    async (id: string) => {
+    async (id: string | undefined) => {
       try {
+        if (!id) return
         const cards = await removeCard(id)
         cards && setCards(cards)
+        setSeletedCardToRemove(undefined)
       } catch (error) {
         // TODO handle error
         console.error(error)
@@ -162,6 +168,10 @@ export const Board = () => {
     isLogged ? loadCards() : setCards(INITIAL_CARDS)
   }, [isLogged, loadCards])
 
+  React.useEffect(() => {
+    setShowRemoveCardConfirmation(!!selectedCardToRemove)
+  }, [selectedCardToRemove])
+
   return (
     <S.Main>
       <Header onNewCard={openNewCard} />
@@ -169,7 +179,7 @@ export const Board = () => {
         title="To Do"
         cards={cards['todo']}
         onSave={(card) => confirmUpdateCard(card)}
-        onDeleteCard={confirmRemoveCard}
+        onDeleteCard={setSeletedCardToRemove}
         onForwardCard={(id: string) => confirmMoveCard(id, 'next')}
         onBackwardCard={(id: string) => confirmMoveCard(id, 'back')}
       />
@@ -177,7 +187,7 @@ export const Board = () => {
         title="Doing"
         cards={cards['doing']}
         onSave={(card) => confirmUpdateCard(card)}
-        onDeleteCard={confirmRemoveCard}
+        onDeleteCard={setSeletedCardToRemove}
         onForwardCard={(id: string) => confirmMoveCard(id, 'next')}
         onBackwardCard={(id: string) => confirmMoveCard(id, 'back')}
       />
@@ -185,7 +195,7 @@ export const Board = () => {
         title="Done"
         cards={cards['done']}
         onSave={(card) => confirmUpdateCard(card)}
-        onDeleteCard={confirmRemoveCard}
+        onDeleteCard={setSeletedCardToRemove}
         onForwardCard={(id: string) => confirmMoveCard(id, 'next')}
         onBackwardCard={(id: string) => confirmMoveCard(id, 'back')}
       />
@@ -201,20 +211,45 @@ export const Board = () => {
         </S.NewTaskModalContent>
       </Modal>
 
+      {/* Remove card confirmation  */}
+      <Modal isOpen={showRemoveCardConfirmation}>
+        <S.ModalContent>
+          <S.ConfirmDeleteIcon size={50} />
+
+          <S.ModalMessage>
+            Are you sure you want to remove the card
+          </S.ModalMessage>
+
+          <S.ModalButtons>
+            <S.ModalButton
+              type="button"
+              onClick={() => confirmRemoveCard(selectedCardToRemove)}
+            >
+              Yes
+            </S.ModalButton>
+            <S.ModalButton
+              type="button"
+              onClick={() => setSeletedCardToRemove(undefined)}
+            >
+              No
+            </S.ModalButton>
+          </S.ModalButtons>
+        </S.ModalContent>
+      </Modal>
+
       {/* Expired Session Modal */}
-      <Modal isOpen={isSessionExpired} hideCloseButton>
-        <S.SessionExpiredContent>
+      <Modal isOpen={isSessionExpired}>
+        <S.ModalContent>
           <S.SessionExpiredIcon size={50} />
-          <S.SessionExpiredMessage>
+
+          <S.ModalMessage>
             Expired session. Please do login again
-          </S.SessionExpiredMessage>
-          <S.SessionExpiredButton
-            type="button"
-            onClick={handleOnSessionExpired}
-          >
+          </S.ModalMessage>
+
+          <S.ModalButton type="button" onClick={handleOnSessionExpired}>
             Ok
-          </S.SessionExpiredButton>
-        </S.SessionExpiredContent>
+          </S.ModalButton>
+        </S.ModalContent>
       </Modal>
     </S.Main>
   )

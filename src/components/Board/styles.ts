@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 import media from 'styled-media-query'
-import { Error } from '@styled-icons/boxicons-regular'
+import { Error, QuestionMark } from '@styled-icons/boxicons-regular'
 
 import { Wrapper as Header } from '../Header/styles'
 
@@ -16,21 +16,17 @@ export const Main = styled.main`
   }
 
   ${media.greaterThan('medium')`
-    grid-template-columns: [todo] 1fr [doing] 1fr [done] 1fr;
+    grid-template-columns: repeat(3, 1fr);
 
     ${Header} {
       grid-column: 1 / 4;
     }
-
   `}
 `
 
-export const NewTaskModalContent = styled.div`
-  max-width: 480px;
-  width: 100%;
-`
+export const NewTaskModalContent = styled.div``
 
-export const SessionExpiredContent = styled.div`
+export const ModalContent = styled.div`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
@@ -45,20 +41,21 @@ export const SessionExpiredContent = styled.div`
   `};
 `
 
-export const SessionExpiredIcon = styled(Error)`
-  ${({ theme }) => css`
-    color: ${theme.colors.black};
-    margin-bottom: 20px;
-  `};
-`
-
-export const SessionExpiredMessage = styled.p`
+export const ModalMessage = styled.p`
   font-size: 1.8rem;
   font-weight: 700;
   text-align: center;
   margin-bottom: 20px;
 `
-export const SessionExpiredButton = styled.button`
+
+export const ModalButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+`
+
+export const ModalButton = styled.button`
   ${({ theme }) => css`
     outline: none;
     background-color: ${theme.colors.primary};
@@ -76,5 +73,23 @@ export const SessionExpiredButton = styled.button`
       border-color: ${theme.colors.privaryHover};
       color: ${theme.colors.black};
     }
+
+    & + button {
+      margin-left: 10px;
+    }
+  `};
+`
+
+export const SessionExpiredIcon = styled(Error)`
+  ${({ theme }) => css`
+    color: ${theme.colors.black};
+    margin-bottom: 20px;
+  `};
+`
+
+export const ConfirmDeleteIcon = styled(QuestionMark)`
+  ${({ theme }) => css`
+    color: ${theme.colors.black};
+    margin-bottom: 20px;
   `};
 `

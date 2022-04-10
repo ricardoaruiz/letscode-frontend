@@ -27,8 +27,8 @@ export const Overlay = styled.div<OverlayProps>`
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    width: 100vw;
+    height: 100vh;
     z-index: 10;
     background-color: rgba(0, 0, 0, 0.7);
 
@@ -41,6 +41,9 @@ export const Overlay = styled.div<OverlayProps>`
 export const Content = styled.div`
   z-index: 20;
   outline: none;
+  width: 100%;
+  max-width: 500px;
+  padding: 0 16px;
 `
 
 export const ActionButton = styled.button`
@@ -53,7 +56,7 @@ export const ActionButton = styled.button`
 
     position: relative;
     top: -140px;
-    right: -280px;
+    right: 0px;
 
     &:hover {
       color: ${theme.colors.primary};
