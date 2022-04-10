@@ -11,9 +11,9 @@ export const useApi = () => {
   const { setIsSessionExpired } = useAuth()
   const { getItem } = useLocalStorage()
 
-  const API = axios.create({
-    baseURL: 'http://localhost:5000',
-  })
+  const baseURL = 'http://localhost:5000'
+  // const baseURL = 'https://letscode-api.herokuapp.com'
+  const API = axios.create({ baseURL })
 
   API.interceptors.request.use((request: AxiosRequestConfig) => {
     const token = getItem('token') || ''

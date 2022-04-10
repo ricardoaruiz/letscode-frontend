@@ -8,26 +8,29 @@ import { ActionButton } from '../ActionButton'
 import * as S from './styles'
 
 export const Header: React.VFC<HeaderProps> = ({ onNewCard }) => {
+  const [isLoading, setIsLoading] = React.useState(false)
   const { login, logout, isLogged } = useAuth()
 
   const userRef = React.useRef<HTMLInputElement | null>(null)
   const passwordRef = React.useRef<HTMLInputElement | null>(null)
 
   const handleSubmitFormLogin = React.useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
+    async (event: React.FormEvent<HTMLFormElement>) => {
       try {
-        event.preventDefault()
+        setIsLoading(true)
 
+        event.preventDefault()
         const user = userRef.current?.value
         const password = passwordRef.current?.value
 
         if (user && password) {
-          login({ login: user, senha: password })
+          await login({ login: user, senha: password })
         }
       } catch (error) {
         // TODO handle erros
         console.error('Header.handleSubmitFormLogin', error)
-        throw error
+      } finally {
+        setIsLoading(false)
       }
     },
     [login]
@@ -39,22 +42,27 @@ export const Header: React.VFC<HeaderProps> = ({ onNewCard }) => {
       <S.Actions>
         {!isLogged && (
           <form onSubmit={handleSubmitFormLogin}>
-            <S.Input
-              type="text"
-              placeholder="User"
-              ref={userRef}
-              defaultValue="letscode"
-            />
-            <S.Input
-              type="password"
-              placeholder="Password"
-              ref={passwordRef}
-              defaultValue="lets@123"
-            />
+            {!isLoading && (
+              <>
+                <S.Input
+                  type="text"
+                  placeholder="User"
+                  ref={userRef}
+                  defaultValue="letscode"
+                />
+                <S.Input
+                  type="password"
+                  placeholder="Password"
+                  ref={passwordRef}
+                  defaultValue="lets@123"
+                />
 
-            <ActionButton type="submit" aria-label="Login button" light>
-              <LogInCircle size={24} />
-            </ActionButton>
+                <ActionButton type="submit" aria-label="Login button" light>
+                  <LogInCircle size={24} />
+                </ActionButton>
+              </>
+            )}
+            {isLoading && <S.LoginLoader size={24} />}
           </form>
         )}
         {isLogged && (

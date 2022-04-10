@@ -1,6 +1,7 @@
-import styled, { css } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import { darken } from 'polished'
 import media from 'styled-media-query'
+import { LoaderAlt } from '@styled-icons/boxicons-regular'
 
 export const Wrapper = styled.header`
   ${({ theme }) => css`
@@ -61,5 +62,15 @@ export const Input = styled.input`
       border: 1px solid ${darken(0.2, theme.colors.primary)};
       color: ${darken(0.2, theme.colors.primary)};
     }
+  `};
+`
+const infinityRotate = keyframes`
+  to{ transform: rotate(360deg); }
+`
+
+export const LoginLoader = styled(LoaderAlt)`
+  ${({ theme }) => css`
+    animation: ${infinityRotate} 2s linear infinite;
+    color: ${theme.colors.primary};
   `};
 `

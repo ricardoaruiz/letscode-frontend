@@ -6,6 +6,7 @@ import { CardValues } from '../Card/types'
 import { Header } from '../Header'
 import { Lane } from '../Lane'
 import { LANE_PATH } from './constants'
+import { Loader } from '../Loader'
 import { Modal } from '../Modal'
 import { useAuth } from '../../contexts/AuthContext'
 import { useCard } from '../../services/useCard'
@@ -19,6 +20,7 @@ const INITIAL_CARDS = {
 }
 
 export const Board = () => {
+  const [isLoading, setIsLoading] = React.useState(false)
   const [cards, setCards] = React.useState<Cards>(INITIAL_CARDS)
   const [showNewCard, setShowNewCard] = React.useState(false)
   const [showRemoveCardConfirmation, setShowRemoveCardConfirmation] =
@@ -41,6 +43,8 @@ export const Board = () => {
   const confirmCreateCard = React.useCallback(
     async (card: CardValues) => {
       try {
+        setShowNewCard(false)
+        setIsLoading(true)
         const createdCard = await createCard(card)
         if (createdCard) {
           setShowNewCard(false)
@@ -52,7 +56,8 @@ export const Board = () => {
       } catch (error) {
         // TODO handle error
         console.error('Board.confirmCreatedCard', error)
-        throw error
+      } finally {
+        setIsLoading(false)
       }
     },
     [createCard]
@@ -64,6 +69,7 @@ export const Board = () => {
   const confirmRemoveCard = React.useCallback(
     async (id: string | undefined) => {
       try {
+        setIsLoading(true)
         if (!id) return
         const cards = await removeCard(id)
         cards && setCards(cards)
@@ -71,7 +77,8 @@ export const Board = () => {
       } catch (error) {
         // TODO handle error
         console.error('Board.confirmRemoveCard', error)
-        throw error
+      } finally {
+        setIsLoading(false)
       }
     },
     [removeCard]
@@ -101,6 +108,7 @@ export const Board = () => {
       futureLane: string = card.list
     ) => {
       try {
+        setIsLoading(true)
         const updatedCard = await updateCard(card)
 
         if (updatedCard) {
@@ -119,7 +127,8 @@ export const Board = () => {
       } catch (error) {
         // TODO handle errors
         console.error('Board.confirmUpdatedCard', error)
-        throw error
+      } finally {
+        setIsLoading(false)
       }
     },
     [updateCard]
@@ -160,8 +169,16 @@ export const Board = () => {
    *
    */
   const loadCards = React.useCallback(async () => {
-    const cards = await getCards()
-    cards && setCards(cards)
+    try {
+      setIsLoading(true)
+      const cards = await getCards()
+      cards && setCards(cards)
+    } catch (error) {
+      // TODO handle errors
+      console.error('Board.loadCards', error)
+    } finally {
+      setIsLoading(false)
+    }
   }, [getCards])
 
   /**
@@ -177,6 +194,7 @@ export const Board = () => {
 
   return (
     <S.Main>
+      <Loader isVisisble={isLoading} />
       <Header onNewCard={openNewCard} />
       <Lane
         title="To Do"
@@ -228,7 +246,10 @@ export const Board = () => {
           <S.ModalButtons>
             <S.ModalButton
               type="button"
-              onClick={() => confirmRemoveCard(selectedCardToRemove)}
+              onClick={() => {
+                setShowRemoveCardConfirmation(false)
+                confirmRemoveCard(selectedCardToRemove)
+              }}
             >
               Yes
             </S.ModalButton>
