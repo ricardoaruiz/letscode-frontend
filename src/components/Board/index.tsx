@@ -223,9 +223,7 @@ export const Board = () => {
         <S.ModalContent>
           <S.ConfirmDeleteIcon size={50} />
 
-          <S.ModalMessage>
-            Are you sure you want to remove the card
-          </S.ModalMessage>
+          <S.ModalMessage>Confirm card deletion?</S.ModalMessage>
 
           <S.ModalButtons>
             <S.ModalButton
