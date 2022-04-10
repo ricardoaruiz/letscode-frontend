@@ -13,6 +13,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const { getItem, setItem, removeItem } = useLocalStorage()
 
   const [isLogged, setIsLogged] = React.useState(false)
+  const [isSessionExpired, setIsSessionExpired] = React.useState(false)
 
   const login = React.useCallback(
     async (credentials: Credentials) => {
@@ -36,6 +37,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isLogged,
     login,
     logout,
+    isSessionExpired,
+    setIsSessionExpired,
   }
 
   return (

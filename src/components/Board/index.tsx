@@ -1,24 +1,28 @@
 import React from 'react'
 
-import { Lane } from '../Lane'
-import { Header } from '../Header'
-import { Modal } from '../Modal'
 import { Card } from '../Card'
-import { CardValues } from '../Card/types'
 import { Cards } from '../../services/useCard/types'
-import { useCard } from '../../services/useCard'
+import { CardValues } from '../Card/types'
+import { Header } from '../Header'
+import { Lane } from '../Lane'
 import { LANE_PATH } from './constants'
+import { Modal } from '../Modal'
+import { useAuth } from '../../contexts/AuthContext'
+import { useCard } from '../../services/useCard'
 
 import * as S from './styles'
 
+const INITIAL_CARDS = {
+  todo: [],
+  doing: [],
+  done: [],
+}
+
 export const Board = () => {
-  const [cards, setCards] = React.useState<Cards>({
-    todo: [],
-    doing: [],
-    done: [],
-  })
+  const [cards, setCards] = React.useState<Cards>(INITIAL_CARDS)
   const [showNewCard, setShowNewCard] = React.useState(false)
   const { getCards, createCard, removeCard, updateCard } = useCard()
+  const { isLogged, logout, isSessionExpired, setIsSessionExpired } = useAuth()
 
   /**
    *
@@ -138,6 +142,14 @@ export const Board = () => {
   /**
    *
    */
+  const handleOnSessionExpired = React.useCallback(() => {
+    logout()
+    setIsSessionExpired(false)
+  }, [logout, setIsSessionExpired])
+
+  /**
+   *
+   */
   const loadCards = React.useCallback(async () => {
     const cards = await getCards()
     cards && setCards(cards)
@@ -147,8 +159,8 @@ export const Board = () => {
    *
    */
   React.useEffect(() => {
-    loadCards()
-  }, [loadCards])
+    isLogged ? loadCards() : setCards(INITIAL_CARDS)
+  }, [isLogged, loadCards])
 
   return (
     <S.Main>
@@ -178,6 +190,7 @@ export const Board = () => {
         onBackwardCard={(id: string) => confirmMoveCard(id, 'back')}
       />
 
+      {/* New Card Modal */}
       <Modal isOpen={showNewCard} closeOnEsc={() => setShowNewCard(false)}>
         <S.NewTaskModalContent>
           <Card
@@ -186,6 +199,22 @@ export const Board = () => {
             list="todo"
           />
         </S.NewTaskModalContent>
+      </Modal>
+
+      {/* Expired Session Modal */}
+      <Modal isOpen={isSessionExpired} hideCloseButton>
+        <S.SessionExpiredContent>
+          <S.SessionExpiredIcon size={50} />
+          <S.SessionExpiredMessage>
+            Expired session. Please do login again
+          </S.SessionExpiredMessage>
+          <S.SessionExpiredButton
+            type="button"
+            onClick={handleOnSessionExpired}
+          >
+            Ok
+          </S.SessionExpiredButton>
+        </S.SessionExpiredContent>
       </Modal>
     </S.Main>
   )

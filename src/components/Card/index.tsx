@@ -119,7 +119,7 @@ export const Card: React.FC<CardProps> = ({
       )}
 
       {isEditMode && (
-        <S.Form ref={formRef}>
+        <S.Form ref={formRef} onSubmit={(event) => event.preventDefault()}>
           <S.InputTitle
             aria-label="Type the title here"
             placeholder="Type the title here"

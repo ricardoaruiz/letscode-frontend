@@ -1,10 +1,11 @@
 import React from 'react'
-import API from '../api-config'
 import { Card, CardResponse, Cards, UseCard } from './types'
+import { useApi } from '../useApi'
 
 const CARDS_URI = '/cards'
 
 export const useCard = (): UseCard => {
+  const api = useApi()
   /**
    *
    */
@@ -58,12 +59,12 @@ export const useCard = (): UseCard => {
    */
   const getCards = React.useCallback(async () => {
     try {
-      const response = await API.get<CardResponse[]>(CARDS_URI)
+      const response = await api.get<CardResponse[]>(CARDS_URI)
       return convertCardsFromApiToView(response.data)
     } catch (error) {
       // TODO handle errors
     }
-  }, [convertCardsFromApiToView])
+  }, [api, convertCardsFromApiToView])
 
   /**
    *
@@ -72,7 +73,7 @@ export const useCard = (): UseCard => {
   const createCard = React.useCallback(
     async (card: Card): Promise<Card | undefined> => {
       try {
-        const response = await API.post<CardResponse>(
+        const response = await api.post<CardResponse>(
           CARDS_URI,
           convertCardFromViewToApi(card)
         )
@@ -82,7 +83,7 @@ export const useCard = (): UseCard => {
         // TODO handle errors
       }
     },
-    [convertCardFromApiToView, convertCardFromViewToApi]
+    [api, convertCardFromApiToView, convertCardFromViewToApi]
   )
 
   /**
@@ -92,13 +93,13 @@ export const useCard = (): UseCard => {
   const removeCard = React.useCallback(
     async (id: string) => {
       try {
-        const response = await API.delete<CardResponse[]>(`${CARDS_URI}/${id}`)
+        const response = await api.delete<CardResponse[]>(`${CARDS_URI}/${id}`)
         return convertCardsFromApiToView(response.data)
       } catch (error) {
         // TODO handle erros
       }
     },
-    [convertCardsFromApiToView]
+    [api, convertCardsFromApiToView]
   )
 
   /**
@@ -107,17 +108,18 @@ export const useCard = (): UseCard => {
   const updateCard = React.useCallback(
     async (card: Card): Promise<Card | undefined> => {
       try {
-        const response = await API.put<CardResponse>(
+        const response = await api.put<CardResponse>(
           `${CARDS_URI}/${card.id}`,
           convertCardFromViewToApi(card)
         )
+
         return convertCardFromApiToView(response.data)
       } catch (error) {
         // TODO handle errors
         console.error(error)
       }
     },
-    [convertCardFromApiToView, convertCardFromViewToApi]
+    [api, convertCardFromApiToView, convertCardFromViewToApi]
   )
 
   return {

@@ -13,13 +13,18 @@ export const Header: React.VFC<HeaderProps> = ({ onNewCard }) => {
 
   const handleSubmitFormLogin = React.useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault()
+      try {
+        event.preventDefault()
 
-      const user = userRef.current?.value
-      const password = passwordRef.current?.value
+        const user = userRef.current?.value
+        const password = passwordRef.current?.value
 
-      if (user && password) {
-        login({ login: user, senha: password })
+        if (user && password) {
+          login({ login: user, senha: password })
+        }
+      } catch (error) {
+        // TODO handle erros
+        console.error(error)
       }
     },
     [login]
