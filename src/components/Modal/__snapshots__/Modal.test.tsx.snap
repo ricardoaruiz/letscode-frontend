@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Modal /> should be render correctly 1`] = `
+<div
+  class="sc-bczRLJ cnUETY"
+>
+  <div
+    aria-hidden="true"
+    class="sc-gsnTZi bkcHLK"
+    role="alertdialog"
+    tabindex="1"
+  >
+    <h3>
+      Title
+    </h3>
+    <p>
+      Content
+    </p>
+  </div>
+</div>
+`

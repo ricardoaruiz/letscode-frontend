@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { LogInCircle, User, Exit, Task } from '@styled-icons/boxicons-regular'
 import { useAuth } from '../../contexts/AuthContext'
 import { HeaderProps } from './types'
+import { ActionButton } from '../ActionButton'
 
 import * as S from './styles'
 
@@ -24,7 +26,8 @@ export const Header: React.VFC<HeaderProps> = ({ onNewCard }) => {
         }
       } catch (error) {
         // TODO handle erros
-        console.error(error)
+        console.error('Header.handleSubmitFormLogin', error)
+        throw error
       }
     },
     [login]
@@ -49,29 +52,36 @@ export const Header: React.VFC<HeaderProps> = ({ onNewCard }) => {
               defaultValue="lets@123"
             />
 
-            <S.ActionButton type="submit" aria-label="Login button">
+            <ActionButton type="submit" aria-label="Login button" light>
               <LogInCircle size={24} />
-            </S.ActionButton>
+            </ActionButton>
           </form>
         )}
         {isLogged && (
           <>
-            <S.ActionButton
+            <ActionButton
               aria-label="new task"
               onClick={onNewCard}
               title="Create new task"
+              light
             >
               <Task size={24} />
-            </S.ActionButton>
-            <S.ActionButton
+            </ActionButton>
+            <ActionButton
               aria-label="user information"
               title="User information"
+              light
             >
               <User size={24} />
-            </S.ActionButton>
-            <S.ActionButton aria-label="logout" onClick={logout} title="Logout">
+            </ActionButton>
+            <ActionButton
+              aria-label="logout"
+              onClick={logout}
+              title="Logout"
+              light
+            >
               <Exit size={24} />
-            </S.ActionButton>
+            </ActionButton>
           </>
         )}
       </S.Actions>

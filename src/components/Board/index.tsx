@@ -51,7 +51,8 @@ export const Board = () => {
         }
       } catch (error) {
         // TODO handle error
-        console.error(error)
+        console.error('Board.confirmCreatedCard', error)
+        throw error
       }
     },
     [createCard]
@@ -69,7 +70,8 @@ export const Board = () => {
         setSeletedCardToRemove(undefined)
       } catch (error) {
         // TODO handle error
-        console.error(error)
+        console.error('Board.confirmRemoveCard', error)
+        throw error
       }
     },
     [removeCard]
@@ -116,7 +118,8 @@ export const Board = () => {
         }
       } catch (error) {
         // TODO handle errors
-        console.error(error)
+        console.error('Board.confirmUpdatedCard', error)
+        throw error
       }
     },
     [updateCard]
@@ -202,7 +205,11 @@ export const Board = () => {
 
       {/* New Card Modal */}
       <Modal isOpen={showNewCard} closeOnEsc={() => setShowNewCard(false)}>
-        <S.NewTaskModalContent>
+        <S.NewTaskModalContent
+          role="alertdialog"
+          aria-label="new card modal"
+          aria-hidden={!showNewCard}
+        >
           <Card
             onSave={confirmCreateCard}
             onCancel={() => setShowNewCard(false)}

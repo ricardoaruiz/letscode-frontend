@@ -2,6 +2,7 @@ import { Credentials } from 'services/useLogin/types'
 
 export type AuthProviderProps = {
   children: React.ReactNode
+  reset?: boolean
 }
 
 export type AuthContextValue = {

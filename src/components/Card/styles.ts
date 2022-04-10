@@ -94,23 +94,3 @@ export const Actions = styled.div`
     border-top: 1px solid ${theme.colors.black};
   `};
 `
-
-export const ActionButton = styled.button`
-  ${({ theme }) => css`
-    outline: none;
-    background-color: transparent;
-    border: none;
-    color: ${theme.colors.black};
-    cursor: pointer;
-
-    &:hover {
-      color: ${theme.colors.primary};
-    }
-    &:active {
-      color: ${lighten(0.2, theme.colors.primary)};
-    }
-    &:focus {
-      color: ${theme.colors.primary};
-    }
-  `}
-`

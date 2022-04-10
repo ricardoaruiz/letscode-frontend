@@ -63,6 +63,8 @@ export const useCard = (): UseCard => {
       return convertCardsFromApiToView(response.data)
     } catch (error) {
       // TODO handle errors
+      console.error('useCard.getCards', error)
+      throw error
     }
   }, [api, convertCardsFromApiToView])
 
@@ -81,6 +83,8 @@ export const useCard = (): UseCard => {
         return convertCardFromApiToView(response.data)
       } catch (error) {
         // TODO handle errors
+        console.error('useCard.createCard', error)
+        throw error
       }
     },
     [api, convertCardFromApiToView, convertCardFromViewToApi]
@@ -97,6 +101,8 @@ export const useCard = (): UseCard => {
         return convertCardsFromApiToView(response.data)
       } catch (error) {
         // TODO handle erros
+        console.error('useCard.removeCard', error)
+        throw error
       }
     },
     [api, convertCardsFromApiToView]
@@ -116,7 +122,8 @@ export const useCard = (): UseCard => {
         return convertCardFromApiToView(response.data)
       } catch (error) {
         // TODO handle errors
-        console.error(error)
+        console.error('useCard.updateCard', error)
+        throw error
       }
     },
     [api, convertCardFromApiToView, convertCardFromViewToApi]

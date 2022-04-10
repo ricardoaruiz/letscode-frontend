@@ -45,27 +45,3 @@ export const Content = styled.div`
   max-width: 500px;
   padding: 0 16px;
 `
-
-export const ActionButton = styled.button`
-  ${({ theme }) => css`
-    outline: none;
-    background-color: transparent;
-    border: none;
-    color: ${theme.colors.white};
-    cursor: pointer;
-
-    position: relative;
-    top: -140px;
-    right: 0px;
-
-    &:hover {
-      color: ${theme.colors.primary};
-    }
-    &:active {
-      color: ${lighten(0.2, theme.colors.primary)};
-    }
-    &:focus {
-      color: ${theme.colors.primary};
-    }
-  `}
-`

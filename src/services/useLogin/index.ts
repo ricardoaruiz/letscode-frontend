@@ -16,7 +16,8 @@ export const useLogin = (): UseLogin => {
         return response.data
       } catch (error) {
         // TODO handle errors
-        console.error('Error on login', error)
+        console.error('useLogin.login', error)
+        throw error
       }
     },
     [api]

@@ -8,7 +8,10 @@ AuthContext.displayName = 'AuthContext'
 
 const TOKEN = 'token'
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({
+  children,
+  reset,
+}) => {
   const { login: doLoggin } = useLogin()
   const { getItem, setItem, removeItem } = useLocalStorage()
 
@@ -17,9 +20,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = React.useCallback(
     async (credentials: Credentials) => {
-      const token = await doLoggin(credentials)
-      setIsLogged(true)
-      setItem(TOKEN, token)
+      try {
+        const token = await doLoggin(credentials)
+        setIsLogged(true)
+        setItem(TOKEN, token)
+      } catch (error) {
+        // TODO handle errors
+        console.error('AuthContext.login', error)
+        throw error
+      }
     },
     [doLoggin, setItem]
   )
@@ -32,6 +41,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   React.useEffect(() => {
     setIsLogged(!!getItem(TOKEN))
   }, [getItem])
+
+  React.useEffect(() => {
+    if (reset) {
+      setIsLogged(false)
+      setIsSessionExpired(false)
+    }
+  }, [reset])
 
   const contextValue = {
     isLogged,

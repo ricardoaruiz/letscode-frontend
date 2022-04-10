@@ -1,6 +1,10 @@
 import React from 'react'
-import userEvent from '@testing-library/user-event'
-import { renderWithContext, screen, waitFor } from '../../utils/test-utils'
+import {
+  renderWithContext,
+  screen,
+  waitFor,
+  fireEvent,
+} from '../../utils/test-utils'
 
 import { Card } from '.'
 
@@ -11,6 +15,7 @@ describe('<Card />', () => {
         id="1"
         title="New Task"
         content="This is the content of new task"
+        list="todo"
         onDelete={jest.fn()}
         onBack={jest.fn()}
         onNext={jest.fn()}
@@ -41,6 +46,7 @@ describe('<Card />', () => {
         id="1"
         title="New Task"
         content="This is the content of new task"
+        list="todo"
         onDelete={jest.fn()}
         onBack={jest.fn()}
         onNext={jest.fn()}
@@ -57,7 +63,7 @@ describe('<Card />', () => {
     const editButton = screen.getByRole('button', { name: /edit/i })
     expect(editButton).toBeInTheDocument()
 
-    userEvent.click(editButton)
+    fireEvent.click(editButton)
 
     expect(
       await screen.findByRole('textbox', {
@@ -71,11 +77,10 @@ describe('<Card />', () => {
       })
     ).toBeInTheDocument()
 
-    expect(
-      screen.getByRole('button', {
-        name: /cancel edit button/i,
-      })
-    ).toBeInTheDocument()
+    const cancelButton = screen.getByRole('button', {
+      name: /cancel edit button/i,
+    })
+    expect(cancelButton).toBeInTheDocument()
 
     expect(
       screen.getByRole('button', {
@@ -86,6 +91,18 @@ describe('<Card />', () => {
     expect(viewTitle).not.toBeInTheDocument()
     expect(viewContent).not.toBeInTheDocument()
     expect(editButton).not.toBeInTheDocument()
+
+    fireEvent.click(cancelButton)
+
+    expect(
+      await screen.findByRole('heading', { name: /new task/i })
+    ).toBeInTheDocument()
+    expect(
+      await screen.findByText(/this is the content of new task/i)
+    ).toBeInTheDocument()
+    expect(
+      await screen.findByRole('button', { name: /edit/i })
+    ).toBeInTheDocument()
   })
 
   it('should be call delete callback when delete button is clicked', async () => {
@@ -95,6 +112,7 @@ describe('<Card />', () => {
         id="10"
         title="New Task"
         content="This is the content of new task"
+        list="todo"
         onDelete={mockedOnDelete}
         onBack={jest.fn()}
         onNext={jest.fn()}
@@ -106,7 +124,7 @@ describe('<Card />', () => {
       name: /remove button/i,
     })
 
-    userEvent.click(removeButton)
+    fireEvent.click(removeButton)
 
     await waitFor(() => {
       expect(mockedOnDelete).toBeCalledTimes(1)
@@ -123,6 +141,7 @@ describe('<Card />', () => {
         id="10"
         title="New Task"
         content="This is the content of new task"
+        list="todo"
         onDelete={jest.fn()}
         onBack={mockedOnBack}
         onNext={jest.fn()}
@@ -130,7 +149,7 @@ describe('<Card />', () => {
       />
     )
 
-    userEvent.click(screen.getByRole('button', { name: /back button/i }))
+    fireEvent.click(screen.getByRole('button', { name: /back button/i }))
 
     await waitFor(() => {
       expect(mockedOnBack).toBeCalledTimes(1)
@@ -145,6 +164,7 @@ describe('<Card />', () => {
         id="10"
         title="New Task"
         content="This is the content of new task"
+        list="todo"
         onDelete={jest.fn()}
         onBack={jest.fn()}
         onNext={mockedOnNext}
@@ -152,11 +172,138 @@ describe('<Card />', () => {
       />
     )
 
-    userEvent.click(screen.getByRole('button', { name: /next button/i }))
+    fireEvent.click(screen.getByRole('button', { name: /next button/i }))
 
     await waitFor(() => {
       expect(mockedOnNext).toBeCalledTimes(1)
     })
     expect(mockedOnNext).toBeCalledWith('10')
+  })
+
+  it('should be call save callback when save button is clicked', async () => {
+    const mockedOnSave = jest.fn()
+    renderWithContext(
+      <Card
+        id="10"
+        title="New Task"
+        content="This is the content of new task"
+        list="todo"
+        onDelete={jest.fn()}
+        onBack={jest.fn()}
+        onNext={jest.fn()}
+        onSave={mockedOnSave}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: /edit/i }))
+
+    const inputTitle = await screen.findByPlaceholderText(
+      /type the title here/i
+    )
+    expect(inputTitle).toBeInTheDocument()
+
+    fireEvent.change(inputTitle, { target: { value: 'updated title' } })
+
+    await waitFor(() => {
+      expect(inputTitle).toHaveValue('updated title')
+    })
+
+    const inputContent = await screen.findByLabelText(/type the content here/i)
+    expect(inputContent).toBeInTheDocument()
+    fireEvent.change(inputContent, { target: { value: 'updated content' } })
+    await waitFor(() => {
+      expect(inputContent).toHaveValue('updated content')
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: /save edit button/i }))
+
+    await waitFor(() => {
+      expect(mockedOnSave).toBeCalledWith({
+        id: '10',
+        title: 'updated title',
+        content: 'updated content',
+        list: 'todo',
+      })
+    })
+  })
+
+  it('should ot be call save callback when save button is clicked and content is empty', async () => {
+    const mockedOnSave = jest.fn()
+    renderWithContext(
+      <Card
+        id="10"
+        title="New Task"
+        content="This is the content of new task"
+        list="todo"
+        onDelete={jest.fn()}
+        onBack={jest.fn()}
+        onNext={jest.fn()}
+        onSave={mockedOnSave}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: /edit/i }))
+
+    const inputTitle = await screen.findByPlaceholderText(
+      /type the title here/i
+    )
+    expect(inputTitle).toBeInTheDocument()
+    fireEvent.change(inputTitle, { target: { value: 'updated title' } })
+    await waitFor(() => {
+      expect(inputTitle).toHaveValue('updated title')
+    })
+
+    const inputContent = await screen.findByLabelText(/type the content here/i)
+    expect(inputContent).toBeInTheDocument()
+    fireEvent.change(inputContent, { target: { value: '' } })
+    await waitFor(() => {
+      expect(inputContent).toHaveValue('')
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: /save edit button/i }))
+
+    await waitFor(() => {
+      expect(mockedOnSave).not.toHaveBeenCalled()
+    })
+  })
+
+  it('should not be call save callback when save button is clicked and title is empty', async () => {
+    const mockedOnSave = jest.fn()
+    renderWithContext(
+      <Card
+        id="10"
+        title="New Task"
+        content="This is the content of new task"
+        list="todo"
+        onDelete={jest.fn()}
+        onBack={jest.fn()}
+        onNext={jest.fn()}
+        onSave={mockedOnSave}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: /edit/i }))
+
+    const inputTitle = await screen.findByPlaceholderText(
+      /type the title here/i
+    )
+    expect(inputTitle).toBeInTheDocument()
+    fireEvent.change(inputTitle, { target: { value: '' } })
+    await waitFor(() => {
+      expect(inputTitle).toHaveValue('')
+    })
+
+    const inputContent = await screen.findByLabelText(/type the content here/i)
+    expect(inputContent).toBeInTheDocument()
+    fireEvent.change(inputContent, { target: { value: 'updated content' } })
+    await waitFor(() => {
+      expect(inputContent).toHaveValue('updated content')
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: /save edit button/i }))
+
+    await waitFor(() => {
+      expect(mockedOnSave).not.toBeCalled()
+    })
   })
 })

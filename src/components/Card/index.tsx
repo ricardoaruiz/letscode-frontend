@@ -10,6 +10,7 @@ import {
 } from '@styled-icons/boxicons-regular'
 
 import { CardProps } from './types'
+import { ActionButton } from '../ActionButton'
 
 import * as S from './styles'
 
@@ -80,40 +81,40 @@ export const Card: React.FC<CardProps> = ({
         <>
           <S.ViewTitle>
             {title}
-            <S.ActionButton
+            <ActionButton
               aria-label="edit"
               onClick={handleEditButtonClick}
               title="Edit"
               className="edit-button"
             >
               <Edit size={20} />
-            </S.ActionButton>
+            </ActionButton>
           </S.ViewTitle>
 
           <S.ViewContent>{content}</S.ViewContent>
 
           <S.Actions>
-            <S.ActionButton
+            <ActionButton
               aria-label="back button"
               title="Move to preview lane"
               onClick={handleBackButtonClick}
             >
               <LeftArrow size={20} />
-            </S.ActionButton>
-            <S.ActionButton
+            </ActionButton>
+            <ActionButton
               aria-label="remove button"
               title="Remove"
               onClick={handleDeleteButtonClick}
             >
               <Trash size={20} />
-            </S.ActionButton>
-            <S.ActionButton
+            </ActionButton>
+            <ActionButton
               aria-label="next button"
               title="Move to next lane"
               onClick={handleNextButtonClick}
             >
               <RightArrow size={20} />
-            </S.ActionButton>
+            </ActionButton>
           </S.Actions>
         </>
       )}
@@ -135,23 +136,23 @@ export const Card: React.FC<CardProps> = ({
           />
 
           <S.Actions>
-            <S.ActionButton
+            <ActionButton
               type="button"
               aria-label="cancel edit button"
               title="Cancel operation"
               onClick={handleCancelButtonClick}
             >
               <Block size={20} />
-            </S.ActionButton>
+            </ActionButton>
 
-            <S.ActionButton
+            <ActionButton
               type="button"
               aria-label="save edit button"
               title="Save operation"
               onClick={handleSaveButtonClick}
             >
               <Save size={20} />
-            </S.ActionButton>
+            </ActionButton>
           </S.Actions>
         </S.Form>
       )}

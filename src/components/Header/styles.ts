@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { lighten } from 'polished'
+import { darken } from 'polished'
 import media from 'styled-media-query'
 
 export const Wrapper = styled.header`
@@ -48,33 +48,18 @@ export const Input = styled.input`
     outline: none;
     padding: 6px 8px;
     background-color: ${theme.colors.black};
-    border: 1px solid ${lighten(0.2, theme.colors.black)};
+    border: 1px solid ${theme.colors.primary};
+    color: ${theme.colors.primary};
     border-radius: 4px;
     font-size: 1.4rem;
-    color: ${theme.colors.white};
 
     & + input {
       margin-left: 10px;
     }
 
     &:focus {
-      border: 1px solid ${lighten(0.4, theme.colors.black)};
-    }
-  `};
-`
-export const ActionButton = styled.button`
-  ${({ theme }) => css`
-    background-color: transparent;
-    border: none;
-    color: ${theme.colors.white};
-    cursor: pointer;
-    margin-left: 10px;
-
-    &:hover {
-      color: ${theme.colors.primary};
-    }
-    &:active {
-      color: ${lighten(0.2, theme.colors.primary)};
+      border: 1px solid ${darken(0.2, theme.colors.primary)};
+      color: ${darken(0.2, theme.colors.primary)};
     }
   `};
 `

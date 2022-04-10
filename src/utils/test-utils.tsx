@@ -7,7 +7,7 @@ import { theme } from '../styles/Theme'
 const renderWithContext = (children: React.ReactNode) => {
   return render(
     <ThemeProvider theme={theme}>
-      <AuthProvider>{children}</AuthProvider>
+      <AuthProvider reset>{children}</AuthProvider>
     </ThemeProvider>
   )
 }
