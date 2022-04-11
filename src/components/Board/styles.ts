@@ -37,7 +37,6 @@ export const ModalContent = styled.div`
 
     background-color: ${theme.colors.white};
     height: 150px;
-    width: 250px;
   `};
 `
 
@@ -50,6 +49,7 @@ export const ModalMessage = styled.p`
 
 export const ModalButtons = styled.div`
   display: flex;
+  width: 80%;
   justify-content: space-between;
   align-items: center;
   height: 40px;

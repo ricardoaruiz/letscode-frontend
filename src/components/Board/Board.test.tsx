@@ -19,13 +19,18 @@ describe('<Board />', () => {
   it('should be open show new card modal', async () => {
     renderWithContext(<Board />)
 
-    const inputUser = screen.getByPlaceholderText(/user/i)
-    const inputPassword = screen.getByPlaceholderText(/password/i)
-    const loginButton = screen.getByLabelText(/login button/i)
+    const loginButton = screen.getAllByLabelText(/login button/i)[0]
+    fireEvent.click(loginButton)
 
+    const inputUser = screen.getAllByPlaceholderText(/user/i)[0]
+    const inputPassword = screen.getAllByPlaceholderText(/password/i)[0]
     fireEvent.change(inputUser, { target: { value: 'letscode' } })
     fireEvent.change(inputPassword, { target: { value: 'lets@123' } })
-    fireEvent.click(loginButton)
+    const loginMobileButton = await screen.findByRole('button', {
+      name: /Login mobile button/i,
+    })
+
+    fireEvent.click(loginMobileButton)
 
     await waitFor(() => {
       expect(screen.getByLabelText(/new task/i)).toBeInTheDocument()

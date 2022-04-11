@@ -71,4 +71,8 @@ Você pode acessar uma versão funcional da aplicação no seguinte endereço:
 
 http://letscode-front.s3-website-us-east-1.amazonaws.com/
 
+## Desktop
 ![alt text](extras/demosntration.gif)
+
+## Mobile
+![alt text](extras/demosntration-mobile.gif)

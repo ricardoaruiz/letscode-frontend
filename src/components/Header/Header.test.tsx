@@ -12,83 +12,32 @@ describe('<Header />', () => {
   it('should be render correctly', () => {
     renderWithContext(<Header onNewCard={jest.fn()} />)
     expect(screen.getByLabelText(/logo let's code/i)).toBeInTheDocument()
-    expect(screen.getByPlaceholderText(/user/i)).toBeInTheDocument()
-    expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/login button/i)).toBeInTheDocument()
+    expect(screen.getAllByPlaceholderText(/user/i)).toHaveLength(2)
+    expect(screen.getAllByPlaceholderText(/password/i)).toHaveLength(2)
+    expect(screen.getAllByLabelText(/login button/i)).toHaveLength(2)
   })
 
   it('should be login successfuly', async () => {
     renderWithContext(<Header onNewCard={jest.fn()} />)
-    const inputUser = screen.getByPlaceholderText(/user/i)
-    const inputPassword = screen.getByPlaceholderText(/password/i)
-    const loginButton = screen.getByLabelText(/login button/i)
-
-    fireEvent.change(inputUser, { target: { value: 'letscode' } })
-    fireEvent.change(inputPassword, { target: { value: 'lets@123' } })
+    const loginButton = screen.getAllByLabelText(/login button/i)[0]
     fireEvent.click(loginButton)
 
-    expect(await screen.findByLabelText(/new task/i)).toBeInTheDocument()
+    const inputUser = screen.getAllByPlaceholderText(/user/i)[0]
+    const inputPassword = screen.getAllByPlaceholderText(/password/i)[0]
+    fireEvent.change(inputUser, { target: { value: 'letscode' } })
+    fireEvent.change(inputPassword, { target: { value: 'lets@123' } })
+    const loginMobileButton = await screen.findByRole('button', {
+      name: /Login mobile button/i,
+    })
+
+    fireEvent.click(loginMobileButton)
+
+    await waitFor(() => {
+      expect(screen.getByLabelText(/new task/i)).toBeInTheDocument()
+    })
     expect(
       await screen.findByLabelText(/user information/i)
     ).toBeInTheDocument()
     expect(await screen.findByLabelText(/logout/i)).toBeInTheDocument()
-  })
-
-  it('should not be login successfuly when user not informed', async () => {
-    renderWithContext(<Header onNewCard={jest.fn()} />)
-    const inputUser = screen.getByPlaceholderText(/user/i)
-    const inputPassword = screen.getByPlaceholderText(/password/i)
-    const loginButton = screen.getByLabelText(/login button/i)
-
-    fireEvent.change(inputUser, { target: { value: '' } })
-    fireEvent.change(inputPassword, { target: { value: 'lets@123' } })
-    fireEvent.click(loginButton)
-
-    expect(
-      await waitFor(() => {
-        return screen.queryByLabelText(/new task/i)
-      })
-    ).not.toBeInTheDocument()
-
-    expect(
-      await waitFor(() => {
-        return screen.queryByLabelText(/user information/i)
-      })
-    ).not.toBeInTheDocument()
-
-    expect(
-      await waitFor(() => {
-        return screen.queryByLabelText(/logout/i)
-      })
-    ).not.toBeInTheDocument()
-  })
-
-  it('should not be login successfuly when password not informed', async () => {
-    renderWithContext(<Header onNewCard={jest.fn()} />)
-    const inputUser = screen.getByPlaceholderText(/user/i)
-    const inputPassword = screen.getByPlaceholderText(/password/i)
-    const loginButton = screen.getByLabelText(/login button/i)
-
-    fireEvent.change(inputUser, { target: { value: 'letscode' } })
-    fireEvent.change(inputPassword, { target: { value: '' } })
-    fireEvent.click(loginButton)
-
-    expect(
-      await waitFor(() => {
-        return screen.queryByLabelText(/new task/i)
-      })
-    ).not.toBeInTheDocument()
-
-    expect(
-      await waitFor(() => {
-        return screen.queryByLabelText(/user information/i)
-      })
-    ).not.toBeInTheDocument()
-
-    expect(
-      await waitFor(() => {
-        return screen.queryByLabelText(/logout/i)
-      })
-    ).not.toBeInTheDocument()
   })
 })

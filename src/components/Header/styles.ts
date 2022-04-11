@@ -13,6 +13,28 @@ export const Wrapper = styled.header`
   `};
 `
 
+export const Mobile = styled.div`
+  ${media.lessThan('medium')`
+    display: block;
+    pointer-events: all;
+  `}
+  ${media.greaterThan('medium')`
+    display: none;
+    pointer-events: none;
+  `}
+`
+
+export const Desktop = styled.div`
+  ${media.lessThan('medium')`
+    display: none;
+    pointer-events: none;
+  `}
+  ${media.greaterThan('medium')`
+    display: block;
+    pointer-events: all;
+  `}
+`
+
 export const Logo = styled.div`
   ${({ theme }) => css`
     color: ${theme.colors.primary};
@@ -54,10 +76,6 @@ export const Input = styled.input`
     border-radius: 4px;
     font-size: 1.4rem;
 
-    & + input {
-      margin-left: 10px;
-    }
-
     &:focus {
       border: 1px solid ${darken(0.2, theme.colors.primary)};
       color: ${darken(0.2, theme.colors.primary)};
@@ -73,4 +91,49 @@ export const LoginLoader = styled(LoaderAlt)`
     animation: ${infinityRotate} 2s linear infinite;
     color: ${theme.colors.primary};
   `};
+`
+export const ModalContent = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    padding: 20px;
+
+    background-color: ${theme.colors.black};
+    height: 150px;
+  `};
+`
+
+export const ModalButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+`
+
+export const FormLoginDesktop = styled.form`
+  & input + input {
+    margin-left: 10px;
+  }
+`
+
+export const FormLoginMobile = styled.form`
+  display: grid;
+  grid-row-gap: 10px;
+`
+
+export const FormLoginMobileTitle = styled.h2`
+  ${({ theme }) => css`
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: ${theme.colors.primary};
+  `};
+`
+export const FormLoginActions = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `
