@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, fireEvent, waitFor } from '../../utils/test-utils'
+import { render, screen, fireEvent } from '../../utils/test-utils'
 
 import { Modal } from '.'
 

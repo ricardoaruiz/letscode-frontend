@@ -26,6 +26,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 
         setIsLogged(true)
         setItem(TOKEN, token)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         setErrorMessage(error.message)
         throw error

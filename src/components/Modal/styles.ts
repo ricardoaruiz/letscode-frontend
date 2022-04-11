@@ -1,6 +1,4 @@
 import styled, { css } from 'styled-components'
-import { lighten } from 'polished'
-
 import { ModalProps } from './types'
 
 type OverlayProps = Pick<ModalProps, 'isOpen'>
