@@ -55,6 +55,16 @@ yarn dev
 
 A aplicação deve ser iniciada e carregada automaticamente no seu navegador padrão
 
+# Testes
+
+Os testes da aplicação podem ser executados com o seguinte comando:
+
+```script
+yarn test
+```
+
+![alt text](extras/tests.png)
+
 # Demonstração básica de uso
 
 Você pode acessar uma versão funcional da aplicação no seguinte endereço:
