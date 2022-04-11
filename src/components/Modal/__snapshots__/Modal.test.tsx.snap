@@ -6,7 +6,7 @@ exports[`<Modal /> should be render correctly 1`] = `
 >
   <div
     aria-hidden="true"
-    class="sc-gsnTZi bkcHLK"
+    class="sc-gsnTZi hqQIrS"
     role="alertdialog"
     tabindex="1"
   >

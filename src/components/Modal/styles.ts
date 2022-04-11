@@ -43,5 +43,7 @@ export const Content = styled.div`
   outline: none;
   width: 100%;
   max-width: 500px;
-  padding: 0 16px;
+  margin: 0 16px;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
 `

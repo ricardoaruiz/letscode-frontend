@@ -11,14 +11,13 @@ export const useLogin = (): UseLogin => {
    */
   const login = React.useCallback(
     async (credentials: Credentials) => {
-      try {
-        const response = await api.post('/login', credentials)
-        return response.data
-      } catch (error) {
-        // TODO handle errors
-        console.error('useLogin.login', error)
-        throw error
+      const response = await api.post('/login', credentials)
+
+      if (!response.data) {
+        throw new Error('Invalid credentials')
       }
+
+      return response.data
     },
     [api]
   )

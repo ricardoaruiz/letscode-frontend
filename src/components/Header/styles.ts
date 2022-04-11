@@ -1,7 +1,7 @@
 import styled, { css, keyframes } from 'styled-components'
 import { darken } from 'polished'
 import media from 'styled-media-query'
-import { LoaderAlt } from '@styled-icons/boxicons-regular'
+import { LoaderAlt, Error } from '@styled-icons/boxicons-regular'
 
 export const Wrapper = styled.header`
   ${({ theme }) => css`
@@ -76,9 +76,17 @@ export const Input = styled.input`
     border-radius: 4px;
     font-size: 1.4rem;
 
+    &::placeholder {
+      color: ${theme.colors.primary};
+    }
+
     &:focus {
       border: 1px solid ${darken(0.2, theme.colors.primary)};
       color: ${darken(0.2, theme.colors.primary)};
+
+      &::placeholder {
+        color: ${darken(0.2, theme.colors.primary)};
+      }
     }
   `};
 `
@@ -92,8 +100,8 @@ export const LoginLoader = styled(LoaderAlt)`
     color: ${theme.colors.primary};
   `};
 `
-export const ModalContent = styled.div`
-  ${({ theme }) => css`
+export const ModalContent = styled.div<{ dark?: boolean }>`
+  ${({ theme, dark = false }) => css`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -101,7 +109,7 @@ export const ModalContent = styled.div`
     border-radius: 5px;
     padding: 20px;
 
-    background-color: ${theme.colors.black};
+    background-color: ${dark ? theme.colors.black : theme.colors.white};
     height: 150px;
   `};
 `
@@ -111,6 +119,31 @@ export const ModalButtons = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 40px;
+`
+
+export const ModalButton = styled.button`
+  ${({ theme }) => css`
+    outline: none;
+    background-color: ${theme.colors.primary};
+    border: 1px solid ${theme.colors.primary};
+    border-radius: 4px;
+    min-width: 100px;
+    padding: 5px 15px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: ${theme.colors.white};
+    cursor: pointer;
+
+    &:hover {
+      background-color: ${theme.colors.privaryHover};
+      border-color: ${theme.colors.privaryHover};
+      color: ${theme.colors.black};
+    }
+
+    & + button {
+      margin-left: 10px;
+    }
+  `};
 `
 
 export const FormLoginDesktop = styled.form`
@@ -136,4 +169,17 @@ export const FormLoginActions = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`
+
+export const ModalMessage = styled.p`
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+`
+export const LoginErrorIcon = styled(Error)`
+  ${({ theme }) => css`
+    color: ${theme.colors.black};
+    margin-bottom: 20px;
+  `};
 `

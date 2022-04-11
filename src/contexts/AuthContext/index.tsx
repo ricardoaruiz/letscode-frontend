@@ -17,16 +17,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 
   const [isLogged, setIsLogged] = React.useState(false)
   const [isSessionExpired, setIsSessionExpired] = React.useState(false)
+  const [errorMessage, setErrorMessage] = React.useState('')
 
   const login = React.useCallback(
     async (credentials: Credentials) => {
       try {
         const token = await doLoggin(credentials)
+
         setIsLogged(true)
         setItem(TOKEN, token)
-      } catch (error) {
-        // TODO handle errors
-        console.error('AuthContext.login', error)
+      } catch (error: any) {
+        setErrorMessage(error.message)
         throw error
       }
     },
@@ -37,6 +38,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
     removeItem(TOKEN)
     setIsLogged(false)
   }, [removeItem])
+
+  const cleanErrorMessage = React.useCallback(() => {
+    setErrorMessage('')
+  }, [])
 
   React.useEffect(() => {
     setIsLogged(!!getItem(TOKEN))
@@ -55,6 +60,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
     logout,
     isSessionExpired,
     setIsSessionExpired,
+    errorMessage,
+    cleanErrorMessage,
   }
 
   return (

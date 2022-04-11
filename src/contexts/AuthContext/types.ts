@@ -11,4 +11,6 @@ export type AuthContextValue = {
   logout: () => void
   isSessionExpired: boolean
   setIsSessionExpired: React.Dispatch<React.SetStateAction<boolean>>
+  errorMessage: string
+  cleanErrorMessage: () => void
 }
